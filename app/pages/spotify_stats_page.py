@@ -42,7 +42,7 @@ df = pd.read_csv(data_path)
 # Spotify API credentials
 SPOTIPY_CLIENT_ID = '213250a911734e19ba80a69269f564e4'
 SPOTIPY_CLIENT_SECRET = '08053b9acca043e8807b86b27f52fd0b'
-SPOTIPY_REDIRECT_URI = 'http://127.0.0.1:8050/callback'
+SPOTIPY_REDIRECT_URI = 'https://datascienceproject-34at.onrender.com/callback'
 
 # Scope for user data
 SCOPE = 'user-top-read'
