@@ -1,7 +1,7 @@
 import dash
 from dash import dcc, html
 from dash.dependencies import Input, Output
-from app.pages import home_page, genres_page, polarity_page, solo_collab_page, release_time_page, crisis_page, happiness_score_page
+from app.pages import home_page, genres_page, polarity_page, solo_collab_page, release_time_page, crisis_page, happiness_score_page, explicity_prediction_page, spotify_stats_page
 from app.app import app
 
 # Make sure the server instance is defined at the top
@@ -56,6 +56,10 @@ def display_page(pathname):
         return crisis_page.layout
     elif pathname == '/happiness_score':
         return happiness_score_page.layout
+    elif pathname == '/explicity_prediction':
+        return explicity_prediction_page.layout
+    elif pathname == '/spotify_stats':
+        return spotify_stats_page.layout
     else:
         return html.H3("404 - Could not find page")
 
