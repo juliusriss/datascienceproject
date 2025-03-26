@@ -60,4 +60,4 @@ def display_page(pathname):
         return html.H3("404 - Could not find page")
 
 if __name__ == '__main__':
-    app.run(debug=False, port=8051)
+    app.run(debug=False)
