@@ -42,7 +42,7 @@ df = pd.read_csv(data_path)
 # Spotify API credentials
 SPOTIPY_CLIENT_ID = '213250a911734e19ba80a69269f564e4'
 SPOTIPY_CLIENT_SECRET = '08053b9acca043e8807b86b27f52fd0b'
-SPOTIPY_REDIRECT_URI = 'https://datascienceproject-34at.onrender.com/callback'
+SPOTIPY_REDIRECT_URI = 'http://127.0.0.1:8050/callback'
 
 # Scope for user data
 SCOPE = 'user-top-read'
@@ -124,30 +124,29 @@ layout = html.Div([
     ], className='container_spotify_dropdown'),
 
     html.Div([
-        html.H2("Songs you listened to with their release date and their popularity")
+        html.H2("Songs You Listened to with their Release Date and their Popularity")
     ], className='title'),
 
     # Div: Visualisation for listened songs in relation to their release date
     html.Div([
         dcc.Graph(id='bubble-chart-release-date'),
         html.Div(
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden.",
+            "You can see all songs you listened to up to the last year (dropdown) with their release date. "
+            "The color of the bubles represents the different artists and the size represents the polularity of the songs",
             style=textstyle),
     ], className='container_spotify'),
 
     html.Div([
-        html.H2("Songs you listened to with their first appearance in the charts and their popularity (2017-2024)")
+        html.H2(
+            "Songs You listened to with their First Appearance in the Charts and their Popularity (2017-2024)")
     ], className='title'),
 
     # Div: Visualisation for listend songs in relation to their release date
     html.Div([
         dcc.Graph(id='bubble-chart-charts-date'),
         html.Div(
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden.",
+            "This graphic shows the appearance of songs you listened to in the charts (time range 2017 - 2024). "
+            "The color of the bubles represents the different artists and the size represents the polularity of the songs",
             style=textstyle),
     ], className='container_spotify'),
 
@@ -170,6 +169,7 @@ layout = html.Div([
     [Input('top-n-dropdown', 'value'),
      Input('time-selection-dropdown', 'value')]
 )
+# ChatGPT helped me creating this function as well as the alingment from the top tracks (#top tracks in CSS file)
 def fetch_top_tracks_and_bubble_chart(top_n, time_range):
     # Fetch user's top tracks based on the dropdown selection
     try:
@@ -222,6 +222,7 @@ def fetch_top_tracks_and_bubble_chart(top_n, time_range):
             # No matches to visualise
             fig_release = px.scatter(title='No matches found', template='plotly_dark')
         else:
+
             # Visualise as a scatter plot
             fig_release = px.scatter(bubble_df_release, 
                                     x='year_month',
@@ -232,12 +233,17 @@ def fetch_top_tracks_and_bubble_chart(top_n, time_range):
                                     hover_data=['artists', 'popularity'],
                                     template='plotly_dark',
                                     labels={'year_month': 'Release Date', 'artists': 'Artist(s)', 'track_name': 'Trackname', 'popularity': 'Popularity'})
-            fig_release.update_yaxes(title='Trackname')
-            fig_release.update_xaxes(title='Year')
-            fig_release.update_layout(showlegend=False)
+
+            # Update the axes
+            fig_release.update_yaxes(title='Trackname', title_font=dict(size=14, family='Arial', weight='bold'))
+            fig_release.update_xaxes(title='Year', title_font=dict(size=14, family='Arial', weight='bold'))
+
+            # Adjust the background
+            fig_release.update_layout(showlegend=False, plot_bgcolor='rgba(20,20,20,0.5)', paper_bgcolor='rgba(20,20,20,0.5)')
 
         # Bubble Chart for first appearance
         bubble_data_appearance = []
+
         for track, first_appearance in zip(top_tracks, matched_first_appearance):
             if first_appearance:
                 artists = ', '.join([artist['name'] for artist in track['artists']])
@@ -252,10 +258,9 @@ def fetch_top_tracks_and_bubble_chart(top_n, time_range):
 
         if bubble_df_appearance.empty:
             # No matches to visualise
-            fig_appearance = px.scatter(title='Keine Übereinstimmungen gefunden', template='plotly_dark')
+            fig_appearance = px.scatter(title='No matches found', template='plotly_dark')
         else:
             # Visualise as a scatter plot
-# Visualise as a scatter plot
             fig_appearance = px.scatter(bubble_df_appearance, 
                                         x='first_appearance',
                                         y='track_name', 
@@ -263,33 +268,15 @@ def fetch_top_tracks_and_bubble_chart(top_n, time_range):
                                         color='artists',
                                         hover_name='track_name',
                                         hover_data=['artists', 'popularity'],
-                                        template='plotly',
+                                        template='plotly_dark',
                                         labels={'first_appearance': 'First Appearance', 'artists': 'Artist(s)', 'track_name': 'Trackname', 'popularity': 'Popularity'})
 
-            # Achsentitel fett und schwarz machen
-            fig_appearance.update_yaxes(
-                title='Trackname', 
-                title_font=dict(size=14, family='Arial', color='black', weight='bold'),
-                tickfont=dict(color='black'),  # Achsentick-Beschriftungen schwarz
-                showline=True, linecolor='black',  # Achsenlinie schwarz
-                showgrid=False  # Entfernt die horizontalen Linien
-            )
+            # Update the axes
+            fig_appearance.update_yaxes(title='Trackname', title_font=dict(size=14, family='Arial', weight='bold'))
+            fig_appearance.update_xaxes(title='Year', title_font=dict(size=14, family='Arial', weight='bold'))
 
-            fig_appearance.update_xaxes(
-                title='Year', 
-                title_font=dict(size=14, family='Arial', color='black', weight='bold'),
-                tickfont=dict(color='black'),  # Achsentick-Beschriftungen schwarz
-                showline=True, linecolor='black',  # Achsenlinie schwarz
-                gridcolor='black'  # Gitterlinien nur für x-Achse in Schwarz
-            )
-
-            # Hintergrund transparent machen
-            fig_appearance.update_layout(
-                showlegend=False,
-                plot_bgcolor='rgba(0,0,0,0)',  # Plot-Hintergrund transparent
-                paper_bgcolor='rgba(0,0,0,0)'  # Gesamter Hintergrund transparent
-            )
-
+            # Adjust the background
+            fig_appearance.update_layout(showlegend=False, plot_bgcolor='rgba(20,20,20,0.5)', paper_bgcolor='rgba(20,20,20,0.5)')
 
         return tracks_data, fig_release, fig_appearance
 

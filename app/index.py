@@ -35,8 +35,6 @@ app.layout = html.Div([
 ])
 
 # Define the callback to display the correct page
-
-
 @app.callback(
     Output('page-content', 'children'),
     [Input('url', 'pathname')]
@@ -65,3 +63,5 @@ def display_page(pathname):
 
 if __name__ == '__main__':
     app.run(debug=False)
+
+# , port=8051 used for local machine

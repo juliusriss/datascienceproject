@@ -72,7 +72,7 @@ layout = html.Div([
     ], className='container_polarity_location_dropdown'),
 
     html.Div([
-        html.H2("Wordcloud from lyrics per year (Single words, Bigram, Trigram)")
+        html.H2("Wordcloud from Lyrics per Year (Single words, Bigram, Trigram)")
     ], className='title'),
 
     # Div: Dropdown, visualisation and description for the wordcloud
@@ -85,14 +85,12 @@ layout = html.Div([
             style=dropdown_style),
         dcc.Graph(id='wordcloud-graphs'),
         html.Div(
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden.",
+            "To give you a good insight on the lyrics, you can look at the most used single words, bigrams (two words used together) and trigrams (three words used together).",
             style=textstyle)
     ], className='container_polarity'),
 
     html.Div([
-        html.H2("Polarity of songs per month per year")
+        html.H2("Polarity of Songs per Month per Year")
     ], className='title'),
 
     # Div: Dropdown, visualisation and description for the polarity of songs per month per year
@@ -105,14 +103,12 @@ layout = html.Div([
             style=dropdown_style),
         dcc.Graph(id='polarity-graph'),
         html.Div(
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden.",
+            "This plot shows the distribution of the polarity over all months per year. You can adjust the year in the drodown.",
             style=textstyle)
     ], className='container_polarity'),
     
     html.Div([
-        html.H2("Polarity, song duration, and chart days of top 50 artists per year")
+        html.H2("Polarity, Song Duration, and Chart Days of Top 50 Artists per Year")
     ], className='title'),
 
     # Div: Dropdown, visualisation and description for the polarity, duration, and chart days of top 50 artists per year
@@ -125,14 +121,12 @@ layout = html.Div([
             style=dropdown_style),
         dcc.Graph(id='polarity-graph-top-50'),
         html.Div(
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden.",
+            "You can compare the different polarities with the duration of a song and the days a song stayed in the charts (size of the bubbles).",
             style=textstyle)
     ], className='container_polarity'),
     
     html.Div([
-        html.H2("Polarity of songs from top 15 artists over all years")
+        html.H2("Polarity of Songs from Top 15 Artists over all Years")
     ], className='title'),
 
     # Div: Dropdown, visualisation and description for the polarity of songs from top 15 artists over all years
@@ -147,14 +141,12 @@ layout = html.Div([
         ),
         dcc.Graph(id='polarity-graph-artist'),
         html.Div(
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden.",
+            "The top 15 artists per location based on appearing most often in the charts are available to compare their polarity.",
             style=textstyle)
     ], className='container_polarity'),
 
     html.Div([
-        html.H2("Top 5 songs with highest and lowest polarity per year")
+        html.H2("Top 5 Songs with Highest and Lowest Polarity per Year")
     ], className='title'),
 
     # Div: Dropdown, visualisation and description for the top 5 songs with highest and lowest polarity per year
@@ -168,9 +160,7 @@ layout = html.Div([
             style=dropdown_style),
         dcc.Graph(id='polarity-graph-top-bottom'),
             html.Div(
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden.",
+            "Visualisation of top 5 positive and negative (polarity) songs per year.",
             style=textstyle)
     ], className='container_polarity'),
     
@@ -198,6 +188,8 @@ def update_wordclouds(selected_year, selected_location):
     # Wordcloud one for single words
     wordcloud_1 = WordCloud(
         colormap='Spectral',
+        mode="RGBA",
+        background_color=None,
         max_words=50,
         width=400,
         height=400,
@@ -218,6 +210,8 @@ def update_wordclouds(selected_year, selected_location):
 
     wordcloud_2 = WordCloud(
         colormap='Spectral',
+        background_color=None,
+        mode="RGBA",
         max_words=50,
         width=400,
         height=400,
@@ -238,12 +232,14 @@ def update_wordclouds(selected_year, selected_location):
 
     wordcloud_3 = WordCloud(
         colormap='Spectral',
+        background_color=None,
+        mode="RGBA",
         max_words=75,
         width=400,
         height=400,
     ).generate_from_frequencies(trigram_freq)
     
-    # Convert the third wordCloud image to base64
+    # Convert the third wordcloud image to base64
     img_byte_arr_3 = io.BytesIO()
     wordcloud_3.to_image().save(img_byte_arr_3, format='PNG')
     img_byte_arr_3.seek(0)
@@ -266,7 +262,9 @@ def update_wordclouds(selected_year, selected_location):
         template='plotly_dark',
         showlegend=False,
         margin=dict(l=20, r=20, t=0, b=0),
-
+        paper_bgcolor="rgba(20,20,20,0.5)",
+        plot_bgcolor="rgba(20,20,20,0.5)",
+        
         # Remove the axis for every plot alone (otherwise its showing 2/3 axis)
         xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
         yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
@@ -306,36 +304,19 @@ def update_violin_plot(selected_year, selected_location):
     fig.update_xaxes(categoryorder='array', categoryarray=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
                                                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
 
-    # Adjust the layout
+        # Adjust the layout
     fig.update_layout(
+        template='plotly_dark',
         showlegend=False,
-        template='plotly_dark', 
-        yaxis=dict(
-            showline=True,
-            range=[-1, 1], 
-            dtick=0.5,
-        ),
         xaxis_title='Month',
-        xaxis_title_font=dict(
-            size=14,
-            family='Arial',
-            color='white',
-            weight='bold'
-        ),
+        xaxis_title_font=dict(family='Arial', weight='bold'),
         yaxis_title='Polarity',
-        yaxis_title_font=dict(
-            size=14,
-            family='Arial',
-            color='white',
-            weight='bold'
-        ),
-        xaxis=dict(
-            showline=True
-        ),
+        yaxis_title_font=dict(family='Arial', weight='bold'),
+        paper_bgcolor="rgba(20,20,20,0.5)",
+        plot_bgcolor="rgba(20,20,20,20.5)"
     )
-    
-    return fig
 
+    return fig
 
 # Callback for the polarity of top 50 artists based on max chart days
 @app.callback(
@@ -358,13 +339,19 @@ def update_top50_scatter(selected_year, selected_location):
                      size='max_days_on_chart',
                      color='artist_names',
                      hover_name='artist_names',
-                     labels={'polarity': 'Polarity (avg)', 'duration_seconds': 'Duration (avg in sec)', 'max_days_on_chart': 'Chart Days'})
+                     labels={'polarity': 'Polarity (avg)', 'duration_seconds': 'Duration (avg in sec)', 'max_days_on_chart': 'Chart Days'}
+    )
     
     # Adjust the layout
     fig.update_layout(template='plotly_dark',
                       showlegend=False,
                       yaxis=dict(title='Duration (avg in sec)', range=[100, 350], dtick=50),
-                      xaxis=dict(title='Polarity (avg)', range=[-0.75, 0.75], dtick=0.25))
+                      xaxis_title_font=dict(family='Arial', weight='bold'),
+                      xaxis=dict(title='Polarity (avg)', range=[-0.75, 0.75], dtick=0.25),
+                      yaxis_title_font=dict(family='Arial', weight='bold'),
+                      paper_bgcolor="rgba(20,20,20,0.5)",
+                      plot_bgcolor="rgba(20,20,20,0.5)"
+    )
     
     return fig
 
@@ -415,8 +402,7 @@ def update_top5_songs(selected_year, selected_location):
         hover_data=['main_artist', 'shortened_track_name'],
         color_discrete_map={
             'Positive': 'rgb(93, 105, 177, 0.5)',
-            'Negative': 'rgb(229, 134, 6, 0.5)'
-        },
+            'Negative': 'rgb(229, 134, 6, 0.5)'},
         text='shortened_track_name'
     )
 
@@ -425,15 +411,17 @@ def update_top5_songs(selected_year, selected_location):
         template='plotly_dark',
         showlegend=False,
         xaxis=dict(range=[-1, 1], dtick=0.5, title='Polarity'),
+        xaxis_title_font=dict(family='Arial', weight='bold'),
         yaxis=dict(
             title='Main Artist',
             fixedrange=True,
             categoryorder='array',
-            categoryarray=combined_df['main_artist'].tolist()
-        ),
+            categoryarray=combined_df['main_artist'].tolist()),
+        yaxis_title_font=dict(family='Arial', weight='bold'),
         autosize=True,
-        margin=dict(l=150, r=80, t=80, b=80)
-    )
+        margin=dict(l=150, r=80, t=80, b=80),
+        paper_bgcolor="rgba(20,20,20,0.5)",
+        plot_bgcolor="rgba(20,20,20,0.5)")
 
     fig.update_traces(
         textfont=dict(family='Arial', size=16, color='white', weight='bold'),
@@ -477,13 +465,17 @@ def update_artist_polarity(selected_artists, selected_location):
     # Adjust the layout
     fig.update_layout(
         template='plotly_dark', 
-        yaxis=dict(range=[-1, 1], dtick=0.5, fixedrange=True),
         legend_title='Artist(s)',
         xaxis=dict(showgrid=True, fixedrange=True, title='Year-Month'),
         xaxis_title='Year',
+        xaxis_title_font=dict(family='Arial', weight='bold'),
+        yaxis=dict(range=[-1, 1], dtick=0.5, fixedrange=True),
         yaxis_title='Polarity',
+        yaxis_title_font=dict(family='Arial', weight='bold'),
         autosize=True,
-        margin=dict(l=80, r=80, t=80, b=80)
+        margin=dict(l=80, r=80, t=80, b=80),
+        paper_bgcolor="rgba(20,20,20,0.5)",
+        plot_bgcolor="rgba(20,20,20,0.5)"
     )
     
     # Adjust the y-axis category order

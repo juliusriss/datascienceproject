@@ -63,6 +63,8 @@ fig_wordcloud.update_layout(
     template='plotly_dark',
     showlegend=False,
     margin=dict(l=20, r=20, t=0, b=0),
+    paper_bgcolor="rgba(20,20,20,0.5)",
+    plot_bgcolor="rgba(20,20,20,0.5)",
     xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
     xaxis2=dict(showgrid=False, zeroline=False, showticklabels=False),
@@ -77,23 +79,27 @@ distribution = df['explicit_label'].value_counts().reset_index()
 distribution.columns = ['Explicit', 'Count']
 distribution['Percentage'] = (distribution['Count'] / distribution['Count'].sum()) * 100
 
+import plotly.express as px
+
 # Visualise as a bar chart
 fig = px.bar(distribution, x='Explicit', y='Count', 
              labels={'Explicit': 'Explicit/Not Explicit', 'Count': 'Count'}
 )
 
+# Set the colors for "Explicit" and "Not Explicit"
 fig.update_traces(
     text=distribution['Percentage'].round(2).astype(str) + '%',
     textposition='inside',
-    textfont=dict(
-        size=16,
-        family='Arial',
-        weight='bold')
+    marker=dict(color=distribution['Explicit'].map({'Explicit': 'red', 'Not Explicit': 'green'}))
 )
 
 # Adjust the layout
 fig.update_layout(
     template='plotly_dark',
+    xaxis_title_font=dict(family='Arial', weight='bold'),
+    yaxis_title_font=dict(family='Arial', weight='bold'),
+    paper_bgcolor="rgba(20,20,20,0.5)",
+    plot_bgcolor="rgba(20,20,20,0.5)"
 )
 
 # Style definiton for textstyle
@@ -116,35 +122,31 @@ layout = html.Div([
     ], className='question'),
 
     html.Div([
-        html.H2('Wordcloud for song lyrics (Explicit and Not Explicit)')
+        html.H2('Wordcloud for Song Lyrics (Explicit and Not Explicit)')
     ], className='title'),
 
     # Div: wordcloud visualisation wirh description
     html.Div([
         dcc.Graph(figure=fig_wordcloud),
         html.Div(
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden.",
+            "To give you an insight on the words included in explicit and not explicit songs, you can checkout the wordcloud from above.",
             style=textstyle),
     ], className='container_explicity'),
 
     html.Div([
-        html.H2('Distribution of class labels among all charts data')
+        html.H2('Distribution of Class Labels among all Charts Data')
     ], className='title'),
 
     # Div: visualisation of the label distribution with description
     html.Div([
         dcc.Graph(figure=fig),
-        html.Div("Dies ist ein Text, der im normalen Format angezeigt wird. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden.",
+        html.Div(
+            "This plot shows the distribution of the explicit labels among all locations.",
             style=textstyle),
     ], className='container_explicity'),
 
     html.Div([
-        html.H2('Explicity prediction')
+        html.H2('Explicity Prediction')
     ], className='title'),
     
     # Div: textarea for lyrics input and prediction output field
@@ -166,7 +168,6 @@ def update_prediction(lyrics):
     if lyrics:
         return 'Model is too big to fit it on Render, sorry'
     return 'Model is too big to fit it on Render, sorry'
-
 
 '''
 def update_prediction(lyrics):

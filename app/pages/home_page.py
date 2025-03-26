@@ -5,11 +5,11 @@ cards = [
     {"title": "Genres", "img": "/assets/placeholder.jpg", "link": "/genres"},
     {"title": "Polarity", "img": "/assets/placeholder.jpg", "link": "/polarity"},
     {"title": "Solo artists vs. Collaborations", "img": "/assets/placeholder.jpg", "link": "/solo_collab"},
-    {"title": "Time between release and charting", "img": "/assets/placeholder.jpg", "link": "/release_time"},
-    {"title": "Influence of corona crisis", "img": "/assets/placeholder.jpg", "link": "/crises"},
-    {"title": "Happiness score", "img": "/assets/placeholder.jpg", "link": "/happiness_score"},
-    {"title": "Predict the explicity", "img": "/assets/placeholder.jpg", "link": "/explicity_prediction"},
-    {"title": "Checkout your Spotify statistics", "img": "/assets/placeholder.jpg", "link": "/spotify_stats"},
+    {"title": "Time between Release and Charting", "img": "/assets/placeholder.jpg", "link": "/release_time"},
+    {"title": "Influence of Corona Crisis", "img": "/assets/placeholder.jpg", "link": "/crisis"},
+    {"title": "Happiness Score", "img": "/assets/placeholder.jpg", "link": "/happiness_score"},
+    {"title": "Predict the Explicity", "img": "/assets/placeholder.jpg", "link": "/explicity_prediction"},
+    {"title": "Checkout your Spotify Statistics", "img": "/assets/placeholder.jpg", "link": "/spotify_stats"},
 ]
 
 # Layout with cards for content and imprint

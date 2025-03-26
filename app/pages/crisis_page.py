@@ -7,7 +7,8 @@ from dash import html, dcc, Input, Output
 from app.app import app
 
 # Load the Spotify data
-data_path = Path(__file__).resolve().parents[2] / 'data' / 'final_data' / 'global_17-24_daily.csv'
+data_path = Path(__file__).resolve(
+).parents[2] / 'data' / 'final_data' / 'global_17-24_daily.csv'
 df = pd.read_csv(data_path)
 
 # Process date info
@@ -19,7 +20,8 @@ df_grouped['weekday'] = df_grouped['date'].dt.weekday
 df_grouped['weekday_name'] = df_grouped['date'].dt.strftime('%A')
 
 # Load the covid data
-data_path = Path(__file__).resolve().parents[2] / 'data' / 'final_data' / 'covid.csv'
+data_path = Path(__file__).resolve(
+).parents[2] / 'data' / 'final_data' / 'covid.csv'
 covid = pd.read_csv(data_path)
 
 covid['Date_reported'] = pd.to_datetime(covid['Date_reported'])
@@ -52,7 +54,11 @@ bar_covid_week.update_layout(
     template='plotly_dark',
     xaxis_title='Day of the Week',
     yaxis_title='Total Streams',
-    showlegend=False
+    showlegend=False,
+    xaxis_title_font=dict(family='Arial', weight='bold'),
+    yaxis_title_font=dict(family='Arial', weight='bold'),
+    paper_bgcolor="rgba(20,20,20,0.5)",
+    plot_bgcolor="rgba(20,20,20,0.5)"
 )
 
 # Bar chart: Median daily streams per month
@@ -73,7 +79,11 @@ bar_covid_month.update_layout(
     template='plotly_dark',
     xaxis_title='Month',
     yaxis_title='Total Streams',
-    showlegend=False
+    showlegend=False,
+    xaxis_title_font=dict(family='Arial', weight='bold'),
+    yaxis_title_font=dict(family='Arial', weight='bold'),
+    paper_bgcolor="rgba(20,20,20,0.5)",
+    plot_bgcolor="rgba(20,20,20,0.5)"
 )
 
 # Box plot: Streams distribution based on COVID-19 case intervals
@@ -89,7 +99,11 @@ boxplot_covid = px.box(
 )
 boxplot_covid.update_layout(
     xaxis_tickangle=-45,
-    template='plotly_dark'
+    template='plotly_dark',
+    xaxis_title_font=dict(family='Arial', weight='bold'),
+    yaxis_title_font=dict(family='Arial', weight='bold'),
+    paper_bgcolor="rgba(20,20,20,0.5)",
+    plot_bgcolor="rgba(20,20,20,0.5)"
 )
 
 # Scatter plot: Weekly average streams vs COVID cases
@@ -116,11 +130,15 @@ scatter_covid.update_layout(
     xaxis_title='Week',
     yaxis_title='Weekly Average of Streams',
     legend_title='COVID cases',
-    coloraxis=dict(cmin=0, cmax=500000)
+    coloraxis=dict(cmin=0, cmax=500000),
+    xaxis_title_font=dict(family='Arial', weight='bold'),
+    yaxis_title_font=dict(family='Arial', weight='bold'),
+    paper_bgcolor="rgba(20,20,20,0.5)",
+    plot_bgcolor="rgba(20,20,20,0.5)"
 )
 
 # Style definition for textstyle
-textstyle={
+textstyle = {
     'font-size': '18px',
     'line-height': '1.6',
     'color': '#f2f2f2',
@@ -139,7 +157,7 @@ layout = html.Div([
     ], className='question'),
 
     html.Div([
-        html.H2("Median daily streams per weekday/month")
+        html.H2("Median Daily Streams per Weekday/Month")
     ], className='title'),
 
     html.Div([
@@ -149,49 +167,47 @@ layout = html.Div([
                 {'label': 'Weekly', 'value': 'weekly'},
                 {'label': 'Monthly', 'value': 'monthly'}],
             value='weekly',
-            style = {
+            style={
                 'backgroundColor': 'white',
                 'color': 'black',
                 'font-size': '18px',
                 'border-radius': '5px',
                 'font-weight': 'bold'}),
-            dcc.Graph(id='streams-graph'),
-            html.Div(
-                "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-                "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-                "Er ist weder bearbeitbar noch kann seine Größe verändert werden.",
-                style=textstyle)
+        dcc.Graph(id='streams-graph'),
+        html.Div(
+            "Before diving into the impact of COVID on globally streamed songs, we first explore general listening trends by day and month."
+            "Sundays and December stand out as outliers especially December 24/25th, as we’ll see in the COVID scatterplot below.",
+            style=textstyle)
     ], className='container_covid'),
 
     html.Div([
-        html.H2("Streams distribution based on Covid-19 case intervalls")
+        html.H2("Streams Distribution based on Covid-19 Case Intervalls")
     ], className='title'),
 
     html.Div([
         dcc.Graph(figure=boxplot_covid),
         html.Div(
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden.",
+            "This boxplot clearly shows a slight negative correlation between COVID-19 cases and the number of songs listened to.",
             style=textstyle)
     ], className='container_covid'),
 
     html.Div([
-        html.H2("Streams with weekly streams and Covid-19 cases")
+        html.H2("Streams with Weekly Streams and Covid-19 cases")
     ], className='title'),
 
     html.Div([
         dcc.Graph(figure=scatter_covid),
         html.Div(
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden.",
+            "The time series data illustrates this even more clearly, showing a slight decline in listening activity during periods with high COVID-19 case numbers - especially noticeable in early 2022."
+            "It’s also worth noting that December is a major outlier, which helps explain the unusual data points seen in December 2023.",
             style=textstyle)
     ], className='container_covid')
 
 ])
 
 # Callback to update the weekday/month graph
+
+
 @app.callback(
     Output('streams-graph', 'figure'),
     Input('timeframe-dropdown', 'value')

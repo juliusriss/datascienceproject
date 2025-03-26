@@ -6,7 +6,8 @@ import pandas as pd
 from app.app import app
 
 # Read the data
-data_path = Path(__file__).resolve().parents[2] / 'data' / 'final_data' / 'global_17-24_with_spotifyextras.csv'
+data_path = Path(__file__).resolve(
+).parents[2] / 'data' / 'final_data' / 'global_17-24_with_spotifyextras.csv'
 df = pd.read_csv(data_path)
 
 # Pie Chart
@@ -21,8 +22,14 @@ pie_release = px.pie(
     color_discrete_sequence=px.colors.qualitative.Vivid)
 
 pie_release.update_layout(height=500)
-pie_release.update_traces(textinfo='percent+label')
-pie_release.update_layout(template="plotly_dark")
+pie_release.update_traces(textinfo='percent+label', hole=0.6)
+pie_release.update_layout(template="plotly_dark",
+                          showlegend=False,
+                          xaxis_title_font=dict(family='Arial', weight='bold'),
+                          yaxis_title_font=dict(family='Arial', weight='bold'),
+                          paper_bgcolor="rgba(20,20,20,0.5)",
+                          plot_bgcolor="rgba(20,20,20,0.5)"
+)
 
 # Bar chart
 mean_values = df.groupby('relase-chart_days_bins')[
@@ -51,9 +58,14 @@ bar_release.add_hline(
 
 bar_release.update_traces(textposition='outside')
 bar_release.update_layout(
+    showlegend=False,
     xaxis_title="Time Baskets",
     yaxis_title="Average Max Days on Chart",
-    template="plotly_dark"
+    template="plotly_dark",
+    xaxis_title_font=dict(family='Arial', weight='bold'),
+    yaxis_title_font=dict(family='Arial', weight='bold'),
+    paper_bgcolor="rgba(20,20,20,0.5)",
+    plot_bgcolor="rgba(20,20,20,0.5)"
 )
 
 # Violin chart
@@ -64,7 +76,10 @@ violin_release = px.violin(
     box=True,
     points='all',
     color='relase-chart_days_bins',
-    color_discrete_sequence=px.colors.qualitative.Vivid
+    color_discrete_sequence=px.colors.qualitative.Vivid,
+    category_orders={
+        'relase-chart_days_bins': ['0 days', '<1 week', '1-2 weeks', '2-3 weeks', '3-4 weeks', '4+ weeks']
+    }
 )
 
 overall_median = df['max_days_on_chart'].median()
@@ -77,14 +92,19 @@ violin_release.add_hline(
 )
 
 violin_release.update_layout(
+    showlegend=False,
     xaxis_title="Time Baskets",
     yaxis_title="Max Days on Chart",
     yaxis=dict(range=[0, 200]),
     template="plotly_dark",
+    xaxis_title_font=dict(family='Arial', weight='bold'),
+    yaxis_title_font=dict(family='Arial', weight='bold'),
+    paper_bgcolor="rgba(20,20,20,0.5)",
+    plot_bgcolor="rgba(20,20,20,0.5)"
 )
 
 # Style definition for text style
-textstyle={
+textstyle = {
     'font-size': '18px',
     'line-height': '1.6',
     'color': '#f2f2f2',
@@ -103,17 +123,24 @@ layout = html.Div([
     ], className='question'),
 
     html.Div([
-        html.H2("Time between release and entering the charts")
+        html.H2("Time between Release and Entering the Charts")
     ], className='title'),
 
     html.Div([
         dcc.Graph(figure=pie_release),
         html.Div(
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden.",
+            "While more than half of all songs chart on the same day, there's also a surprising number that take longer.\n"
+            "Almost 20% only get noticed four or more weeks later.\n"
+            "It shows that there are really two main ways a song can blow up:\n"
+            "Either it becomes a hit right away thanks to the hype around a famous artist, or it slowly picks up attention over time.\n"
+            "But is there an advantage to one path over the other?\n\n"
+            "We’ll take a closer look at this in terms of the following attributes:\n\n"
+            "Max Days on Chart: The total number of days a song stayed in the charts.\n"
+            "Total Streams: The total number of streams a song accumulated while in the charts.\n"
+            "Rank: The highest chart position a song reached (lower = better).",
+
             style=textstyle)
-    ],className='container_release_pie'),
+    ], className='container_release_pie'),
 
     html.Div([
         html.H2("Max days in charts, total streams of charted songs per time interval and minimum peak rank in charts per time interval")
@@ -125,10 +152,11 @@ layout = html.Div([
             id='metric-dropdown',
             options=[
                 {'label': 'Max days in charts', 'value': 'max_days_on_chart'},
-                {'label': 'Total streams of charted songs per time interval', 'value': 'total_streams'},
+                {'label': 'Total streams of charted songs per time interval',
+                    'value': 'total_streams'},
                 {'label': 'Minimum rank in charts per time interval', 'value': 'min_peak_rank'},],
             value='min_peak_rank',
-            style = {
+            style={
                 'backgroundColor': 'white',
                 'color': 'black',
                 'font-size': '18px',
@@ -136,29 +164,27 @@ layout = html.Div([
                 'font-weight': 'bold'}),
         dcc.Graph(id='bar-release', figure=bar_release),
         html.Div(
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden."
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden."
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden.",
+            "This bar plot shows that, for each of the three attributes, songs that took longer to first appear on the chart generally stayed in the charts longer.",
             style=textstyle)
     ], className='container_release'),
 
     html.Div([
-        html.H2("Distribution of max days in charts")
+        html.H2("Distribution of Max Days in Charts without Outliers")
     ], className='title'),
 
     # Div: Violin Chart with description
     html.Div([
         dcc.Graph(figure=violin_release),
         html.Div(
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden. "
-            "Er ist weder bearbeitbar noch kann seine Größe verändert werden.",
+            "This violin chart also shows the distribution of the data, revealing that many songs which enter the charts instantly also drop out in a matter of days.",
             style=textstyle)
     ], className='container_release'),
 
 ])
 
 # Callback to update the bar chart
+
+
 @app.callback(
     Output('bar-release', 'figure'),
     [Input('metric-dropdown', 'value')]
@@ -184,9 +210,14 @@ def update_bar_release(selected_metric):
 
     updated_bar_release.update_traces(textposition='outside')
     updated_bar_release.update_layout(
+        showlegend=False,
         xaxis_title="Time Baskets",
         yaxis_title=f"Average {selected_metric.replace('_', ' ').title()}",
-        template="plotly_dark"
-    )
+        template="plotly_dark",
+        xaxis_title_font=dict(family='Arial', weight='bold'),
+        yaxis_title_font=dict(family='Arial', weight='bold'),
+        paper_bgcolor="rgba(20,20,20,0.5)",
+        plot_bgcolor="rgba(20,20,20,0.5)"
+)
 
     return updated_bar_release
