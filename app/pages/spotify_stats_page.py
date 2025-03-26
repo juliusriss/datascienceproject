@@ -181,7 +181,7 @@ def fetch_top_tracks_and_bubble_chart(top_n, time_range):
         for idx, track in enumerate(top_tracks):
             tracks_data.append(html.Div([
                 html.Img(src=track['album']['images'][0]['url'], style={'width': '100px'}),
-                html.H3(f'{idx+1}. {track['name']} by {track['artists'][0]['name']}')
+                html.H3(f"{idx+1}. {track['name']} by {track['artists'][0]['name']}")
             ]))
 
         # Match the tracks with the charts data
