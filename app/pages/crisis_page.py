@@ -175,7 +175,7 @@ layout = html.Div([
                 'font-weight': 'bold'}),
         dcc.Graph(id='streams-graph'),
         html.Div(
-            "Before diving into the impact of COVID on globally streamed songs, we first explore general listening trends by day and month."
+            "Before diving into the impact of COVID on globally streamed songs, we first explore general listening trends by day and month. "
             "Sundays and December stand out as outliers especially December 24/25th, as we’ll see in the COVID scatterplot below.",
             style=textstyle)
     ], className='container_covid'),
@@ -198,7 +198,7 @@ layout = html.Div([
     html.Div([
         dcc.Graph(figure=scatter_covid),
         html.Div(
-            "The time series data illustrates this even more clearly, showing a slight decline in listening activity during periods with high COVID-19 case numbers - especially noticeable in early 2022."
+            "The time series data illustrates this even more clearly, showing a slight decline in listening activity during periods with high COVID-19 case numbers - especially noticeable in early 2022. "
             "It’s also worth noting that December is a major outlier, which helps explain the unusual data points seen in December 2023.",
             style=textstyle)
     ], className='container_covid')

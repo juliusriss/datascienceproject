@@ -206,8 +206,8 @@ def fetch_top_tracks_and_bubble_chart(top_n, time_range):
         # Bubble Chart for release date
         bubble_data_release = []
         for track, year_month in zip(top_tracks, matched_year_months):
-            artists = ', '.join([artist['name'] for artist in track['artists']])  # Künstlernamen zusammenführen
-            popularity = track['popularity']  # Die Popularität des Tracks verwenden
+            artists = ', '.join([artist['name'] for artist in track['artists']])
+            popularity = track['popularity']
 
             bubble_data_release.append({
                 'year_month': year_month,
@@ -283,4 +283,5 @@ def fetch_top_tracks_and_bubble_chart(top_n, time_range):
     except Exception as e:
         fig_release = px.scatter(title=f'Error: {str(e)}', template='plotly_dark')
         fig_appearance = px.scatter(title=f'Error: {str(e)}', template='plotly_dark')
+        
         return f'Error: {str(e)}', fig_release, fig_appearance

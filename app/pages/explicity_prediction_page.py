@@ -25,7 +25,7 @@ def model_prediction(text, model, num_labels=2):
     outputs = model(**inputs)
     predictions = outputs.logits.argmax(dim=-1)
 
-    # Ergebnisinterpretation: 1 = explizit, 0 = nicht explizit
+    # Result
     return 'Explicit' if predictions.item() == 1 else 'Not Explicit'
 
 # Read the data
@@ -70,7 +70,7 @@ fig_wordcloud.update_layout(
     yaxis2=dict(showgrid=False, zeroline=False, showticklabels=False))
 
 # Distribution chart
-# Rename 'True'/'False' to 'Explicit'/'Not Explicit'
+# Rename the label to real name and not binary values
 df['explicit_label'] = df['explicit'].replace({True: 'Explicit', False: 'Not Explicit'})
 
 # Calculate the distribution of explicit and not explicit lyrics

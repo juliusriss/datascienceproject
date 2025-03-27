@@ -60,7 +60,7 @@ layout = html.Div([
         html.H2("What is the contribution of positive and negative words (polarity) in english-language songs at different locations and different artists and how did it evolve on Spotify since 2017?")
     ], className='question'),
 
-    # Dropdown for charts area selection
+    # Div: Dropdown for charts area selection
     html.Div([
         dcc.Dropdown(
             id='location-dropdown',
@@ -167,7 +167,6 @@ layout = html.Div([
 ])
 
 # Callbacks to update the visualisations
-
 # Callback for the wordcloud
 @app.callback(
     Output('wordcloud-graphs', 'figure'),
@@ -245,7 +244,7 @@ def update_wordclouds(selected_year, selected_location):
     img_byte_arr_3.seek(0)
     img_base64_3 = base64.b64encode(img_byte_arr_3.getvalue()).decode('utf-8')
 
-    # Create a subplot with three images (WordClouds)
+    # Create a subplot with three wordcloud images (Subplot is from ChatGPT)
     fig = make_subplots(rows=1, cols=3,)
 
     # Add the first WordCloud image (single)
@@ -304,7 +303,7 @@ def update_violin_plot(selected_year, selected_location):
     fig.update_xaxes(categoryorder='array', categoryarray=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
                                                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
 
-        # Adjust the layout
+    # Adjust the layout
     fig.update_layout(
         template='plotly_dark',
         showlegend=False,
@@ -355,7 +354,7 @@ def update_top50_scatter(selected_year, selected_location):
     
     return fig
 
-# Polarity top 5
+# Callback for polarity of top 5 songs
 @app.callback(
     Output('polarity-graph-top-bottom', 'figure'),
     [Input('year-dropdown-top5', 'value'),
@@ -430,7 +429,7 @@ def update_top5_songs(selected_year, selected_location):
 
     return fig
 
-# Polarity comparison
+# Callback for polarity comparison
 @app.callback(
     Output('polarity-graph-artist', 'figure'),
     [Input('artist-dropdown', 'value'),
@@ -477,8 +476,7 @@ def update_artist_polarity(selected_artists, selected_location):
         paper_bgcolor="rgba(20,20,20,0.5)",
         plot_bgcolor="rgba(20,20,20,0.5)"
     )
-    
-    # Adjust the y-axis category order
+
     fig.update_yaxes(categoryorder='array', categoryarray=selected_artists)
     
     return fig
