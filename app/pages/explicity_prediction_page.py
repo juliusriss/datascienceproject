@@ -160,11 +160,6 @@ layout = html.Div([
     Output('prediction-output', 'children'),
     [Input('lyrics-input', 'value')]
 )
-# Callback for changes in the text field
-@app.callback(
-    Output('prediction-output', 'children'),
-    [Input('lyrics-input', 'value')]
-)
 def update_prediction(lyrics):
     if lyrics:
         model = Path(__file__).resolve().parents[2] / 'data' / 'trained_model_explicity'
