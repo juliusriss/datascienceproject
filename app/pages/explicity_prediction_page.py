@@ -115,7 +115,7 @@ textstyle={
 layout = html.Div([
 
     html.Div([
-        html.H2('How can a trained deep learning model predict the explicity label of a songs lyrics?')
+        html.H2('How well can a pretrained Roberta model predict the explicity label of a songs lyrics?')
     ], className='question'),
 
     html.Div([
@@ -126,7 +126,7 @@ layout = html.Div([
     html.Div([
         dcc.Graph(figure=fig_wordcloud),
         html.Div(
-            "To give you an insight on the words included in explicit and not explicit songs, you can checkout the wordcloud from above.",
+            "To give you an insight on the words included in explicit and not explicit songs, you can check out the wordcloud from above.",
             style=textstyle),
     ], className='container_explicity'),
 

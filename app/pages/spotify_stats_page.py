@@ -132,7 +132,7 @@ layout = html.Div([
         dcc.Graph(id='bubble-chart-release-date'),
         html.Div(
             "You can see all songs you listened to up to the last year (dropdown) with their release date. "
-            "The color of the bubles represents the different artists and the size represents the polularity of the songs",
+            "The color of the bubles represents the different artists and the size represents the popularity of the songs",
             style=textstyle),
     ], className='container_spotify'),
 
@@ -145,8 +145,8 @@ layout = html.Div([
     html.Div([
         dcc.Graph(id='bubble-chart-charts-date'),
         html.Div(
-            "This graphic shows the appearance of songs you listened to in the charts (time range 2017 - 2024). "
-            "The color of the bubles represents the different artists and the size represents the polularity of the songs",
+            "This graphic shows the appearance of songs you listened to in the charts (time range: 2017 - 2024). "
+            "The color of the bubbles represents the different artists and the size represents the popularity of the songs",
             style=textstyle),
     ], className='container_spotify'),
 

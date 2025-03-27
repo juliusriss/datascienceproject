@@ -369,16 +369,14 @@ layout = html.Div([
             'distributed across chart rank ranges and whether certain genres '
             'dominate specific rank ranges. The rank ranges are categorized '
             'into three tiers: upper (1-66), mid (67-133), and lower '
-            '(134-200).',
-            style=textstyle),
-
-        dcc.Graph(id='genre-box-plot', figure=rank_box_fig),
-        html.Div(
-            'This boxplot visualizes how different music genres are '
+            '(134-200).\n'
+            'The boxplot visualizes how different music genres are '
             'distributed across chart ranks. It is meant to provide a more '
             'detailed insight into the distribution of music genres across '
             'ranks in contrast to the previous pie chart.',
-            style=textstyle)
+            style=textstyle),
+
+        dcc.Graph(id='genre-box-plot', figure=rank_box_fig),
     ], className='container_genres')
 
 ])
