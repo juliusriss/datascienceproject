@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 import plotly.subplots as sp
 import pandas as pd
 from wordcloud import WordCloud
-from transformers import AutoModelForSequenceClassification, AutoTokenizer, AutoModel
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from app.app import app
 
 # Function for model prediction
