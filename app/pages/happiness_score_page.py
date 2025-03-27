@@ -108,7 +108,7 @@ choropleth_time_happy = px.choropleth(
     locationmode='country names',
     color='streams_per_capita',
     animation_frame=df['date'].astype(str),
-    color_continuous_scale='Viridis',
+    color_continuous_scale='agsunset',
     template='plotly_dark',
     range_color=(0, df['streams_per_capita'].max())
 )
