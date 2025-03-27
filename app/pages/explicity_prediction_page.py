@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 import plotly.subplots as sp
 import pandas as pd
 from wordcloud import WordCloud
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from transformers import AutoModelForSequenceClassification, AutoTokenizer, AutoModel
 from app.app import app
 
 # Function for model prediction
@@ -32,12 +32,11 @@ def model_prediction(text, model, num_labels=2):
 data_path = Path(__file__).resolve().parents[2] / 'data' / 'final_data' / 'global_17-24_with_polarity_and_spotify.csv'
 df = pd.read_csv(data_path)
 
-#Wordcloud visualisation
-# Text für die Wordclouds vorbereiten
+#Wordcloud visualisation (Subplot is from ChatGPT)
 explicit_lyrics = ' '.join(df[df['explicit']]['lyrics'])
 non_explicit_lyrics = ' '.join(df[~df['explicit']]['lyrics'])
 
-# Funktion zur Umwandlung von WordCloud in Base64
+# Convert to base64
 def wordcloud_to_base64(wordcloud):
     buffer = io.BytesIO()
     wordcloud.to_image().save(buffer, format="PNG")
@@ -45,18 +44,18 @@ def wordcloud_to_base64(wordcloud):
     img_str = base64.b64encode(buffer.getvalue()).decode()
     return f"data:image/png;base64,{img_str}"
 
-# WordClouds generieren
+# Generate wordcloud
 wordcloud_explicit = WordCloud(width=1000, height=1000, colormap='Spectral').generate(explicit_lyrics)
 wordcloud_non_explicit = WordCloud(width=1000, height=1000, colormap='Spectral').generate(non_explicit_lyrics)
 
-# WordClouds in Base64 umwandeln
+# Convert to base 64
 explicit_base64 = wordcloud_to_base64(wordcloud_explicit)
 non_explicit_base64 = wordcloud_to_base64(wordcloud_non_explicit)
 
-# Subplot erstellen
+# Create subplot
 fig_wordcloud = sp.make_subplots(rows=1, cols=2)
 
-# WordClouds als Bild hinzufügen
+# Add wordcloud as a picture
 fig_wordcloud.add_trace(go.Image(source=explicit_base64), row=1, col=1)
 fig_wordcloud.add_trace(go.Image(source=non_explicit_base64), row=1, col=2)
 fig_wordcloud.update_layout(
@@ -78,8 +77,6 @@ df['explicit_label'] = df['explicit'].replace({True: 'Explicit', False: 'Not Exp
 distribution = df['explicit_label'].value_counts().reset_index()
 distribution.columns = ['Explicit', 'Count']
 distribution['Percentage'] = (distribution['Count'] / distribution['Count'].sum()) * 100
-
-import plotly.express as px
 
 # Visualise as a bar chart
 fig = px.bar(distribution, x='Explicit', y='Count', 
@@ -114,7 +111,7 @@ textstyle={
     'font-family': 'Arial, sans-serif'
 }
 
-# Layout for sections
+# Layout for Sections
 layout = html.Div([
 
     html.Div([
@@ -125,7 +122,7 @@ layout = html.Div([
         html.H2('Wordcloud for Song Lyrics (Explicit and Not Explicit)')
     ], className='title'),
 
-    # Div: wordcloud visualisation wirh description
+    # Div: Wordcloud visualisation wirh description
     html.Div([
         dcc.Graph(figure=fig_wordcloud),
         html.Div(
@@ -137,7 +134,7 @@ layout = html.Div([
         html.H2('Distribution of Class Labels among all Charts Data')
     ], className='title'),
 
-    # Div: visualisation of the label distribution with description
+    # Div: Visualisation of the label distribution with description
     html.Div([
         dcc.Graph(figure=fig),
         html.Div(
@@ -149,7 +146,7 @@ layout = html.Div([
         html.H2('Explicity Prediction')
     ], className='title'),
     
-    # Div: textarea for lyrics input and prediction output field
+    # Div: Textarea for lyrics input and prediction output field
     html.Div([
 
             dcc.Textarea(id='lyrics-input', placeholder='Enter your lyrics here...', style={'width': '100%', 'height': 200}),
@@ -163,16 +160,19 @@ layout = html.Div([
     Output('prediction-output', 'children'),
     [Input('lyrics-input', 'value')]
 )
-
 def update_prediction(lyrics):
     if lyrics:
         return 'Model is too big to fit it on Render, sorry'
     return 'Model is too big to fit it on Render, sorry'
 
 '''
+# Read the model
+data_path = Path(__file__).resolve().parents[1] / 'data' / 'trained_model_explicity'
+df = pd.read_csv(data_path)
+
 def update_prediction(lyrics):
     if lyrics:
-        model = '/Users/juliusriss/Desktop/data-science-project-local/data/trained_model_explicity'
+        model = data_path
         prediction = model_prediction(lyrics, model)
         return f'The song is probably: {prediction}'
     return 'Please enter some lyrics first.'
