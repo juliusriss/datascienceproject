@@ -160,20 +160,14 @@ layout = html.Div([
     Output('prediction-output', 'children'),
     [Input('lyrics-input', 'value')]
 )
+# Callback for changes in the text field
+@app.callback(
+    Output('prediction-output', 'children'),
+    [Input('lyrics-input', 'value')]
+)
 def update_prediction(lyrics):
     if lyrics:
-        return 'Model is too big to fit it on Render, sorry'
-    return 'Model is too big to fit it on Render, sorry'
-
-'''
-# Read the model
-data_path = Path(__file__).resolve().parents[1] / 'data' / 'trained_model_explicity'
-df = pd.read_csv(data_path)
-
-def update_prediction(lyrics):
-    if lyrics:
-        model = data_path
+        model = Path(__file__).resolve().parents[2] / 'data' / 'trained_model_explicity'
         prediction = model_prediction(lyrics, model)
         return f'The song is probably: {prediction}'
     return 'Please enter some lyrics first.'
-'''
