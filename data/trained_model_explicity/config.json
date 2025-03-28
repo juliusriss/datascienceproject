@@ -1,5 +1,4 @@
 {
-  "_name_or_path": "distilroberta-base",
   "architectures": [
     "RobertaForSequenceClassification"
   ],
@@ -21,7 +20,7 @@
   "position_embedding_type": "absolute",
   "problem_type": "single_label_classification",
   "torch_dtype": "float32",
-  "transformers_version": "4.49.0",
+  "transformers_version": "4.50.0",
   "type_vocab_size": 1,
   "use_cache": true,
   "vocab_size": 50265
