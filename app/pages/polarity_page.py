@@ -24,10 +24,10 @@ df['first_appearance'] = pd.to_datetime(df['first_appearance'], errors='coerce')
 # Extract all years from first_appearance
 all_years = sorted(df['first_appearance'].dt.year.unique())
 
-# Extract all artists and get the top 15 based on appearances for top15 dropdown and visualisation
+# Extract all artists and get the top 30 based on appearances for top 30 dropdown and visualisation
 artists_list = [artist.strip() for artists in df['artist_names'] for artist in artists.split(',')]
 artist_counts = Counter(artists_list)
-top_15_artists = [artist for artist, _ in artist_counts.most_common(15)]
+top_30_artists = [artist for artist, _ in artist_counts.most_common(30)]
 
 # Get stop words for wordclouds
 nltk.download('stopwords')
@@ -103,7 +103,10 @@ layout = html.Div([
             style=dropdown_style),
         dcc.Graph(id='polarity-graph'),
         html.Div(
-            "This plot shows the distribution of the polarity over all months per year. You can adjust the year in the drodown.",
+            "This plot shows the distribution of the polarity over all months per year. You can adjust the year in the drodown. "
+            "The mean polarity of all locations is approaching zero for all years. Global and Usa both have a maximum polarity "
+            "of around 0.8. The Uk has a maximum polarity of 0.9. All three locations have the same minimum polarity with "
+            "-0.79, which is probably due to having the same song in their charts.",
             style=textstyle)
     ], className='container_polarity'),
     
@@ -126,22 +129,22 @@ layout = html.Div([
     ], className='container_polarity'),
     
     html.Div([
-        html.H2("Polarity of Songs from Top 15 Artists over all Years")
+        html.H2("Polarity of Songs from Top 30 Artists over all Years")
     ], className='title'),
 
-    # Div: Dropdown, visualisation and description for the polarity of songs from top 15 artists over all years
+    # Div: Dropdown, visualisation and description for the polarity of songs from top 30 artists over all years
     html.Div([
         dcc.Dropdown(
             id='artist-dropdown',
-            options=[{'label': artist, 'value': artist} for artist in top_15_artists],
+            options=[{'label': artist, 'value': artist} for artist in top_30_artists],
             multi=True,
-            value=[top_15_artists[0], top_15_artists[1]],
+            value=[top_30_artists[0], top_30_artists[1]],
             searchable=False,
             style=dropdown_style
         ),
         dcc.Graph(id='polarity-graph-artist'),
         html.Div(
-            "The top 15 artists per location based on appearing most often in the charts are available to compare their polarity.",
+            "The top 30 artists per location based on appearing most often in the charts are available to compare their polarity.",
             style=textstyle)
     ], className='container_polarity'),
 
@@ -302,6 +305,9 @@ def update_violin_plot(selected_year, selected_location):
     # Sort the monthnames on the x axis
     fig.update_xaxes(categoryorder='array', categoryarray=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
                                                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
+    
+    # Always show the full polarity range on the y axis
+    fig.update_yaxes(range=[-1, 1], dtick=0.5)
 
     # Adjust the layout
     fig.update_layout(
@@ -436,7 +442,7 @@ def update_top5_songs(selected_year, selected_location):
      Input('location-dropdown', 'value')]
 )
 def update_artist_polarity(selected_artists, selected_location):
-    # Get all rows which include one top 15 artist and selected location
+    # Get all rows which include one top 30 artist and selected location
     def match_artist(artist_names):
         return any(artist in [a.strip() for a in artist_names.split(',')] for artist in selected_artists)
 

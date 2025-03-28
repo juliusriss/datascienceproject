@@ -29,7 +29,7 @@ def model_prediction(text, model, num_labels=2):
     return 'Explicit' if predictions.item() == 1 else 'Not Explicit'
 
 # Read the data
-data_path = Path(__file__).resolve().parents[2] / 'data' / 'final_data' / 'global_17-24_with_polarity_and_spotify.csv'
+data_path = Path(__file__).resolve().parents[2] / 'data' / 'final_data' / 'all_locations_with_polarity_and_spotify_without_duplicates.csv'
 df = pd.read_csv(data_path)
 
 #Wordcloud visualisation (Subplot is from ChatGPT)
@@ -115,11 +115,11 @@ textstyle={
 layout = html.Div([
 
     html.Div([
-        html.H2('How well can a pretrained Roberta model predict the explicity label of a songs lyrics?')
+        html.H2('How well can a pretrained roberta model predict the explicity label of a songs lyrics?')
     ], className='question'),
 
     html.Div([
-        html.H2('Wordcloud for Song Lyrics (Explicit and Not Explicit)')
+        html.H2('Wordcloud for Song Lyrics (Explicit and Not Explicit) among all locations (Global, Usa, Uk).')
     ], className='title'),
 
     # Div: Wordcloud visualisation wirh description
@@ -138,7 +138,9 @@ layout = html.Div([
     html.Div([
         dcc.Graph(figure=fig),
         html.Div(
-            "This plot shows the distribution of the explicit labels among all locations.",
+            "This plot shows the distribution of the explicit labels among all locations (Global, Usa, Uk)."
+            "Global and Uk both have quite balanced labels, but the Usa stands out with 5870 to 4100 labels "
+            "marked as explicit and not explicit.",
             style=textstyle),
     ], className='container_explicity'),
 

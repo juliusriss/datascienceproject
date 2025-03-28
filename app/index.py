@@ -4,7 +4,7 @@ from dash.dependencies import Input, Output
 from app.pages import home_page, genres_page, polarity_page, solo_collab_page, release_time_page, crisis_page, happiness_score_page, explicity_prediction_page, spotify_stats_page
 from app.app import app
 
-# Make sure the server instance is defined at the top
+# Create the server
 server = app.server
 
 # Define the head
@@ -63,5 +63,3 @@ def display_page(pathname):
 
 if __name__ == '__main__':
     app.run(debug=False)
-
-# , port=8051 used for local machine

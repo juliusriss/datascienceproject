@@ -36,13 +36,13 @@ def match_tracks(spotify_tracks, df):
     return matched_years
 
 # Read the data
-data_path = Path(__file__).resolve().parents[2] / 'data' / 'final_data' / 'all_locations_with_polarity_and_spotify.csv'
+data_path = Path(__file__).resolve().parents[2] / 'data' / 'final_data' / 'all_locations_with_polarity_and_spotify_without_duplicates.csv'
 df = pd.read_csv(data_path)
 
 # Spotify API credentials
 SPOTIPY_CLIENT_ID = '213250a911734e19ba80a69269f564e4'
 SPOTIPY_CLIENT_SECRET = '08053b9acca043e8807b86b27f52fd0b'
-SPOTIPY_REDIRECT_URI = 'https://datascienceproject-34at.onrender.com/callback'
+SPOTIPY_REDIRECT_URI = 'http://127.0.0.1:8050/callback'
 
 # Scope for user data
 SCOPE = 'user-top-read'
@@ -132,20 +132,20 @@ layout = html.Div([
         dcc.Graph(id='bubble-chart-release-date'),
         html.Div(
             "You can see all songs you listened to up to the last year (dropdown) with their release date. "
-            "The color of the bubles represents the different artists and the size represents the popularity of the songs",
+            "The color of the bubbles represents the different artists and the size represents the popularity of the songs",
             style=textstyle),
     ], className='container_spotify'),
 
     html.Div([
         html.H2(
-            "Songs You listened to with their First Appearance in the Charts and their Popularity (2017-2024)")
+            "Songs You listened to with their First Appearance in the Charts (Global, Usa, Uk) and their Popularity (2017-2024)")
     ], className='title'),
 
     # Div: Visualisation for listend songs in relation to their release date
     html.Div([
         dcc.Graph(id='bubble-chart-charts-date'),
         html.Div(
-            "This graphic shows the appearance of songs you listened to in the charts (time range: 2017 - 2024). "
+            "This graphic shows the appearance of songs you listened to in the charts. "
             "The color of the bubbles represents the different artists and the size represents the popularity of the songs",
             style=textstyle),
     ], className='container_spotify'),
